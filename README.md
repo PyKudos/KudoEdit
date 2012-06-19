@@ -1,4 +1,6 @@
 KudoEdit
 ========
 
-Hybrid Editor for students
+###Hybrid Editor for students
+
+####Authors: Jay Rambhia, Kunj Karia
