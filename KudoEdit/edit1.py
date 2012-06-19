@@ -7,7 +7,9 @@ This temporary script file is located here:
 """
 import sys
 from PyQt4 import QtGui
-import datetime
+from PyQt4.QtGui import *
+import datetime, os
+
 
 class Window(QtGui.QMainWindow):
     
@@ -18,25 +20,25 @@ class Window(QtGui.QMainWindow):
         
     def initUI(self):
         
-        exitclick = QtGui.QAction(QtGui.QIcon('exit.png'), 'Exit', self)        
-        exitclick.setShortcut('Ctrl+Q')
-        exitclick.setStatusTip('Exit')
-        exitclick.triggered.connect(QtGui.qApp.quit)
-        
-        saveclick = QtGui.QAction(QtGui.QIcon('save.png'), '&Save', self)        
+        saveclick = QAction('Save', self)        
         saveclick.setShortcut('Ctrl+S')
         saveclick.setStatusTip('Save')
         saveclick.triggered.connect(self.savetext)
         
-        #newclick = QtGui.QAction(QtGui.QIcon('new.png'), '&New', self)        
-        #newclick.setShortcut('Ctrl+N')
-        #newclick.setStatusTip('New File')
-        #newclick.triggered.connect(self.newfile())
+        exitclick = QtGui.QAction('Exit', self)        
+        exitclick.setShortcut('Ctrl+Q')
+        exitclick.setStatusTip('Exit')
+        exitclick.triggered.connect(QtGui.qApp.quit)
+        
+        newclick = QtGui.QAction('New', self)        
+        newclick.setShortcut('Ctrl+N')
+        newclick.setStatusTip('New File')
+        newclick.triggered.connect(self.newfile)
     
-       #exitclick = QtGui.QAction(QtGui.QIcon('exit.png'), '&Exit', self)        
-       # exitclick.setShortcut('Ctrl+Q')
-       # exitclick.setStatusTip('Exit application')
-       # exitclick.triggered.connect(QtGui.qApp.quit)
+        openclick = QtGui.QAction('Open', self)        
+        openclick.setShortcut('Ctrl+O')
+        openclick.setStatusTip('Open')
+        openclick.triggered.connect(self.openfile)
         
         self.textEdit = QtGui.QTextEdit()
         self.setCentralWidget(self.textEdit)
@@ -44,16 +46,26 @@ class Window(QtGui.QMainWindow):
         self.statusBar()
         
         menubar = self.menuBar()
-        fileMenu = menubar.addMenu('&File')
-        fileMenu.addAction(exitclick)
+        fileMenu = menubar.addMenu('File')
+        fileMenu.addAction(newclick)
         fileMenu.addAction(saveclick)
-        #fileMenu.addAction(newclick)
+        fileMenu.addAction(exitclick)
+        fileMenu.addAction(openclick)
+        
         self.showMaximized()        
-        self.show()        
-
-         #QString fileName = QFileDialog.getOpenFileName(this, tr("Open File"),"/home",tr("Images (*.png *.xpm *.jpg)"));
-    #def newfile(self):
-        #filename = open('filename','w')
+        self.show()
+                
+    def openfile(self):
+        filename = QFileDialog.getOpenFileName(self,"Open File",os.getcwd())
+        print filename
+        f=open(filename,'r')
+        text=f.read()
+        f.close()
+        self.textEdit.setText(text)
+        self.show()
+    
+    def newfile(self):
+        filename = open('filename_temp','w')
     
     def savetext(self):
         text=self.textEdit.toPlainText()
