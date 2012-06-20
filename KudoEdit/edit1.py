@@ -1,17 +1,12 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This temporary script file is located here:
-/home/kunj/.spyder2/.temp.py
-"""
 import sys
 from PyQt4 import QtGui
 from PyQt4.QtGui import *
-import datetime, os
+import datetime
+import os
 
 
 class Window(QtGui.QMainWindow):
+   
     
     def __init__(self):
         super(Window, self).__init__()
@@ -66,7 +61,8 @@ class Window(QtGui.QMainWindow):
         f.close()
                 
     def save_asfile(self):
-        filename = QFileDialog.getSaveFileName(self,"Save File",os.getcwd())
+        filename = QFileDialog.getSaveFileName(self,"Save File", 
+                                                os.getcwd())
         self.filename=filename
         print filename
         f=open(filename, 'w')
@@ -74,7 +70,8 @@ class Window(QtGui.QMainWindow):
         f.close()
         
     def openfile(self):
-        filename = QFileDialog.getOpenFileName(self,"Open File",os.getcwd())
+        filename = QFileDialog.getOpenFileName(self,"Open File",
+                                                os.getcwd())
         print filename
         f=open(filename, 'r')
         text=f.read()
@@ -85,16 +82,12 @@ class Window(QtGui.QMainWindow):
     def newfile(self):
         filename = open('filename_temp','w')
 
-    def savetext(self):
-        text=self.textEdit.toPlainText()
-        if text:
-            now = datetime.datetime.now()
-            now1=str(now)[:19]
-            savefile=open(now1+'.txt','w')
-            savefile.write(text)
-            
     def closeEvent(self, event):
-        reply = QtGui.QMessageBox.question(self, 'Message', "Are you sure you want to quit?", QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+        reply = QtGui.QMessageBox.question(
+                self, 'Message', 
+                "Are you sure you want to quit?", 
+                QtGui.QMessageBox.Yes |
+                QtGui.QMessageBox.No, QtGui.QMessageBox.No)
 
         if reply == QtGui.QMessageBox.Yes:
             event.accept()
