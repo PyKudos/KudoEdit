@@ -1,25 +1,18 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This temporary script file is located here:
-/home/kunj/.spyder2/.temp.py
-"""
 import sys
 from PyQt4 import QtGui
 from PyQt4.QtGui import *
-import datetime, os
+import os
 
 
 class Window(QtGui.QMainWindow):
     
     def __init__(self):
         super(Window, self).__init__()
-        
+        self.filename = None
         self.initUI()
         
     def initUI(self):
-        
+        print "initUI"
         saveclick = QAction('Save', self)        
         saveclick.setShortcut('Ctrl+S')
         saveclick.setStatusTip('Save')
@@ -45,7 +38,11 @@ class Window(QtGui.QMainWindow):
         saveasclick.triggered.connect(self.save_asfile)
         
         self.textEdit = QtGui.QTextEdit()
-        self.setCentralWidget(self.textEdit)
+        self.tab_widget = QTabWidget()
+        tab1 = self.textEdit
+        layout = QVBoxLayout(tab1)
+        self.tab_widget.addTab(tab1,"untitled*")
+        self.setCentralWidget(self.tab_widget)
 
         self.statusBar()
         
@@ -61,38 +58,37 @@ class Window(QtGui.QMainWindow):
         self.show()
                 
     def savefile(self):
+        if not self.filename:
+            self.save_asfile()
+            return
         f=open(self.filename, 'w')
         f.write(self.textEdit.toPlainText())
         f.close()
-                
+        self.tab_widget.addTab(self.textEdit,self.filename.split("/")[-1])
+        
     def save_asfile(self):
         filename = QFileDialog.getSaveFileName(self,"Save File",os.getcwd())
-        self.filename=filename
+        self.filename = filename
         print filename
         f=open(filename, 'w')
         f.write(self.textEdit.toPlainText())
         f.close()
+        self.tab_widget.addTab(self.textEdit,self.filename.split("/")[-1])
         
     def openfile(self):
         filename = QFileDialog.getOpenFileName(self,"Open File",os.getcwd())
+        self.filename = filename
         print filename
         f=open(filename, 'r')
         text=f.read()
         f.close()
         self.textEdit.setText(text)
+        self.tab_widget.addTab(self.textEdit,self.filename.split("/")[-1])
         self.show()
     
     def newfile(self):
-        filename = open('filename_temp','w')
-
-    def savetext(self):
-        text=self.textEdit.toPlainText()
-        if text:
-            now = datetime.datetime.now()
-            now1=str(now)[:19]
-            savefile=open(now1+'.txt','w')
-            savefile.write(text)
-            
+        self.show()
+    
     def closeEvent(self, event):
         reply = QtGui.QMessageBox.question(self, 'Message', "Are you sure you want to quit?", QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
 
