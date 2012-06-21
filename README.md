@@ -12,7 +12,7 @@ KudoEdit
 ####HOW TO
 
 #####Install
-    wget http://dl.dropbox.com/u/86903114/KudoEdit.tar.gz
+    wget https://github.com/downloads/PyKudos/KudoEdit/KudoEdit.tar.gz
     cd KudoEdit
     sudo python setup.py install
     
