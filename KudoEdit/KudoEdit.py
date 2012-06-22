@@ -20,7 +20,7 @@ class Window(QtGui.QMainWindow):
         exitclick = QAction('Exit', self)        
         exitclick.setShortcut('Ctrl+Q')
         exitclick.setStatusTip('Exit')
-        exitclick.triggered.connect(QtGui.qApp.quit)
+        exitclick.triggered.connect(qApp.quit)
         
         newclick = QAction('New', self)        
         newclick.setShortcut('Ctrl+N')
@@ -45,6 +45,12 @@ class Window(QtGui.QMainWindow):
         pasteclick.setShortcut('Ctrl+V')
         pasteclick.setStatusTip('Paste')
         pasteclick.triggered.connect(self.paste)
+        
+        close_tab_click = QAction('Close', self)        
+        close_tab_click.setShortcut('Ctrl+W')
+        close_tab_click.setStatusTip('Close Current Tab')
+        close_tab_click.triggered.connect(self.close_tab)
+        self.close_tab_click = close_tab_click
         """
         printclick = QAction('Print', self)        
         printclick.setShortcut('Ctrl+P')
@@ -53,9 +59,10 @@ class Window(QtGui.QMainWindow):
         """
         tab = QTextEdit()
         self.tab_widget = QTabWidget()
+        self.tab_widget.tabsClosable()
         
         layout = QVBoxLayout(tab)
-        self.tab_widget.addTab(tab,"untitled*")
+        QtCore.QObject.connect(self.tab_widget, QtCore.SIGNAL('tabCloseRequested(int)'), self.close_tab)
         self.setCentralWidget(self.tab_widget)
 
         self.statusBar()
@@ -67,6 +74,7 @@ class Window(QtGui.QMainWindow):
         fileMenu.addAction(openclick)
         fileMenu.addAction(saveclick)
         fileMenu.addAction(saveasclick)
+        fileMenu.addAction(close_tab_click)
         #fileMenu.addAction(printclick)
         fileMenu.addAction(exitclick)
     
@@ -82,9 +90,36 @@ class Window(QtGui.QMainWindow):
         tabText = self.tab_widget.tabText(tab_index)
         self.tab_widget.tabBar().setTabTextColor(tab_index, 
                                                  QColor(255,0,0))
+        if tab_index < 0:
+            return
         if tabText != "untitled*" and tabText[-1] != "*":
             tabText = tabText+"*"
             self.tab_widget.setTabText(tab_index,tabText)
+            
+    def close_tab(self):
+        print "closing tab"
+        tab_index = self.tab_widget.currentIndex()
+        if tab_index < 0:
+            qApp.quit()
+            return
+        tabText = self.tab_widget.tabText(tab_index)
+        if tabText[-1] == "*":
+            msgBox = QMessageBox()
+            msgBox.setText("The document has been modified.")
+            msgBox.setInformativeText("Do you want to save your changes?")
+            msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
+            msgBox.setDefaultButton(QMessageBox.Save)
+            ret = msgBox.exec_()
+            
+            if ret == QMessageBox.Save:
+                self.savefile()
+                self.close_tab()
+            elif ret == QMessageBox.Discard:
+                pass
+            elif ret == QMessageBox.Cancel:
+                return
+        self.tab_widget.removeTab(tab_index)
+            
     """
     def printfile(self):
         #print_cmd = 'lp -d NetPrinter filename'
@@ -94,16 +129,22 @@ class Window(QtGui.QMainWindow):
     """
     def copy(self):
         tab_index = self.tab_widget.currentIndex()
+        if tab_index < 0:
+            return
         textEdit = self.tab_widget.widget(tab_index)
         textEdit.copy()
         
     def paste(self):
         tab_index = self.tab_widget.currentIndex()
+        if tab_index < 0:
+            return
         textEdit = self.tab_widget.widget(tab_index)
         textEdit.paste()
                 
     def savefile(self):
         tab_index = self.tab_widget.currentIndex()
+        if tab_index < 0:
+            return
         textEdit = self.tab_widget.widget(tab_index)
         filename = self.tab_widget.tabText(tab_index)
         if filename == "untitled*":
@@ -119,6 +160,8 @@ class Window(QtGui.QMainWindow):
         
     def save_asfile(self):
         tab_index = self.tab_widget.currentIndex()
+        if tab_index < 0:
+            return
         textEdit = self.tab_widget.widget(tab_index)
         filename = QFileDialog.getSaveFileName(self,"Save File",os.getcwd())
         print filename
@@ -130,20 +173,35 @@ class Window(QtGui.QMainWindow):
         
     def openfile(self):
         filename = QFileDialog.getOpenFileName(self,"Open File",os.getcwd())
-        self.filename = filename
         print filename
         f=open(filename, 'r')
         text=f.read()
         f.close()
         textEdit = QTextEdit()
         textEdit.setText(text)
-        self.tab_widget.addTab(textEdit,self.filename.split("/")[-1])
+        self.tab_widget.addTab(textEdit,filename.split("/")[-1])
+        tab_count = self.tab_widget.count()
+        tabbar = self.tab_widget.tabBar()
+        close_tab_click = QAction(QIcon(QStyle.SP_TitleBarCloseButton),"",self)
+        close_tab_click.triggered.connect(self.close_tab)
+        but = QToolButton()
+        but.setDefaultAction(close_tab_click)
+        self.tab_widget.tabBar().setTabButton(tab_count-1,QTabBar.RightSide,but)
+        self.tab_widget.tabsClosable()
         self.show()
-    
+        
     def newfile(self):
         tab = QTextEdit()
         layout = QVBoxLayout(tab)
         self.tab_widget.addTab(tab,"untitled*")
+        tab_count = self.tab_widget.count()
+        tabbar = self.tab_widget.tabBar()
+        close_tab_click = QAction(QIcon(QStyle.SP_TitleBarCloseButton),"",self)
+        close_tab_click.triggered.connect(self.close_tab)
+        but = QToolButton()
+        but.setDefaultAction(close_tab_click)
+        self.tab_widget.tabBar().setTabButton(tab_count-1,QTabBar.RightSide,but)
+        self.tab_widget.tabsClosable()
         self.show()
     
     def closeEvent(self, event):
@@ -163,4 +221,3 @@ def KudoEdit():
     app = QApplication(sys.argv)
     window = Window()
     sys.exit(app.exec_())
- 
