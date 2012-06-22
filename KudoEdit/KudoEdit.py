@@ -12,6 +12,7 @@ class Window(QtGui.QMainWindow):
         self.initUI()
         
     def initUI(self):
+        self.italic_flag = False
         self.path = os.path.abspath(__file__)
         self.icon_path = "/".join(self.path.split("/")[:-1]+["icons"])
         saveclick = QAction('Save', self)        
@@ -141,7 +142,7 @@ class Window(QtGui.QMainWindow):
     def italic(self):
         tab_index = self.tab_widget.currentIndex()
         textEdit = self.tab_widget.widget(tab_index)
-        textEdit.setFontItalic(self.italic_flag)
+        textEdit.setFontItalic(not self.italic_flag)
         self.italic_flag = not self.italic_flag
     
     def copy(self):
