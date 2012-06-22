@@ -119,15 +119,11 @@ class Window(QtGui.QMainWindow):
         textEdit = self.tab_widget.widget(tab_index)
         textEdit.paste()
     
-    def originalfont(self):
-        textEdit.QFont()
-    
     def italic(self):
         tab_index = self.tab_widget.currentIndex()
         textEdit = self.tab_widget.widget(tab_index)
         textEdit.setFontItalic(self.italic_flag)
         self.italic_flag = not self.italic_flag
-        
                 
     def savefile(self):
         tab_index = self.tab_widget.currentIndex()

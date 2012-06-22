@@ -51,6 +51,11 @@ class Window(QtGui.QMainWindow):
         close_tab_click.setStatusTip('Close Current Tab')
         close_tab_click.triggered.connect(self.close_tab)
         self.close_tab_click = close_tab_click
+        
+        italicclick = QAction('Italic', self)        
+        italicclick.setStatusTip('Italic')
+        italicclick.triggered.connect(self.italic)
+        
         """
         printclick = QAction('Print', self)        
         printclick.setShortcut('Ctrl+P')
@@ -81,6 +86,9 @@ class Window(QtGui.QMainWindow):
         editMenu = menubar.addMenu('Edit')
         editMenu.addAction(copyclick)
         editMenu.addAction(pasteclick)
+        
+        viewMenu = menubar.addMenu('View')
+        viewMenu.addAction(italicclick)
         
         self.showMaximized()        
         self.show()
@@ -127,6 +135,13 @@ class Window(QtGui.QMainWindow):
         os.popen(str(text))
         #self.textEdit.print_(os.printer)
     """
+    
+    def italic(self):
+        tab_index = self.tab_widget.currentIndex()
+        textEdit = self.tab_widget.widget(tab_index)
+        textEdit.setFontItalic(self.italic_flag)
+        self.italic_flag = not self.italic_flag
+    
     def copy(self):
         tab_index = self.tab_widget.currentIndex()
         if tab_index < 0:
