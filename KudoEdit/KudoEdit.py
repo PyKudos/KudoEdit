@@ -12,6 +12,8 @@ class Window(QtGui.QMainWindow):
         self.initUI()
         
     def initUI(self):
+        self.path = os.path.abspath(__file__)
+        self.icon_path = "/".join(self.path.split("/")[:-1]+["icons"])
         saveclick = QAction('Save', self)        
         saveclick.setShortcut('Ctrl+S')
         saveclick.setStatusTip('Save')
@@ -182,7 +184,7 @@ class Window(QtGui.QMainWindow):
         self.tab_widget.addTab(textEdit,filename.split("/")[-1])
         tab_count = self.tab_widget.count()
         tabbar = self.tab_widget.tabBar()
-        close_tab_click = QAction(QIcon(QStyle.SP_TitleBarCloseButton),"",self)
+        close_tab_click = QAction(QIcon("/".join([self.icon_path,"dialog-close.svg"])),"",self)
         close_tab_click.triggered.connect(self.close_tab)
         but = QToolButton()
         but.setDefaultAction(close_tab_click)
@@ -196,7 +198,7 @@ class Window(QtGui.QMainWindow):
         self.tab_widget.addTab(tab,"untitled*")
         tab_count = self.tab_widget.count()
         tabbar = self.tab_widget.tabBar()
-        close_tab_click = QAction(QIcon(QStyle.SP_TitleBarCloseButton),"",self)
+        close_tab_click = QAction(QIcon("/".join([self.icon_path,"dialog-close.svg"])),"",self)
         close_tab_click.triggered.connect(self.close_tab)
         but = QToolButton()
         but.setDefaultAction(close_tab_click)
@@ -221,3 +223,5 @@ def KudoEdit():
     app = QApplication(sys.argv)
     window = Window()
     sys.exit(app.exec_())
+
+#KudoEdit()
