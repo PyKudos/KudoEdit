@@ -19,6 +19,7 @@ class Window(QtGui.QMainWindow):
         self.initUI()
         
     def initUI(self):
+        self.italic_flag = True
         saveclick = QAction('Save', self)        
         saveclick.setShortcut('Ctrl+S')
         saveclick.setStatusTip('Save')
@@ -122,16 +123,11 @@ class Window(QtGui.QMainWindow):
         textEdit.QFont()
     
     def italic(self):
-        #original_font = textEdit.QFont(sans, textEdit.QtCore.int, italic=False)
-        flag = True        
         tab_index = self.tab_widget.currentIndex()
         textEdit = self.tab_widget.widget(tab_index)
-        if flag:
-            textEdit.setFontItalic(flag)
-            flag = False
-        else:
-            #self.originalfont()
-            print "Flag was false"
+        textEdit.setFontItalic(self.italic_flag)
+        self.italic_flag = not self.italic_flag
+        
                 
     def savefile(self):
         tab_index = self.tab_widget.currentIndex()
