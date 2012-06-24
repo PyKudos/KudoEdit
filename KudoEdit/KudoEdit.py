@@ -13,24 +13,26 @@ class Window(QtGui.QMainWindow):
         
     def initUI(self):
         self.italic_flag = False
+        self.underline_flag = False
         self.path = os.path.abspath(__file__)
         self.icon_path = "/".join(self.path.split("/")[:-1]+["icons"])
-        saveclick = QAction('Save', self)        
+        saveclick = QAction(QtGui.QIcon('/home/kunj/Desktop/icons/save.png'), 'Save', self)        
         saveclick.setShortcut('Ctrl+S')
         saveclick.setStatusTip('Save')
         saveclick.triggered.connect(self.savefile)
         
-        exitclick = QAction('Exit', self)        
+        exitclick = QAction(QtGui.QIcon('/home/kunj/Desktop/icons/exit.png'),'Exit', self)        
         exitclick.setShortcut('Ctrl+Q')
         exitclick.setStatusTip('Exit')
         exitclick.triggered.connect(qApp.quit)
         
-        newclick = QAction('New', self)        
+        newclick = QAction(QtGui.QIcon('/home/kunj/Desktop/icons/new.png'), 'New', self)        
         newclick.setShortcut('Ctrl+N')
         newclick.setStatusTip('New File')
         newclick.triggered.connect(self.newfile)
     
-        openclick = QAction('Open', self)        
+        openclick = QAction(QtGui.QIcon('/home/kunj/Desktop/icons/open.jpg'), 
+                                        'Open', self)
         openclick.setShortcut('Ctrl+O')
         openclick.setStatusTip('Open')
         openclick.triggered.connect(self.openfile)
@@ -39,7 +41,7 @@ class Window(QtGui.QMainWindow):
         saveasclick.setStatusTip('Save As')
         saveasclick.triggered.connect(self.save_asfile)
         
-        copyclick = QAction('Copy', self)        
+        copyclick = QAction('Copy', self)
         copyclick.setShortcut('Ctrl+C')
         copyclick.setStatusTip('Copy')
         copyclick.triggered.connect(self.copy)
@@ -55,25 +57,58 @@ class Window(QtGui.QMainWindow):
         close_tab_click.triggered.connect(self.close_tab)
         self.close_tab_click = close_tab_click
         
-        italicclick = QAction('Italic', self)        
+        italicclick = QAction(QtGui.QIcon(
+                                    '/home/kunj/Desktop/icons/font_italic.png'),
+                                    'Italic', self)
         italicclick.setStatusTip('Italic')
         italicclick.triggered.connect(self.italic)
         
-        """
-        printclick = QAction('Print', self)        
+        boldclick = QAction(QtGui.QIcon(
+                                 '/home/kunj/Desktop/icons/font_bold.png'),
+                                 'Bold', self)        
+        boldclick.setStatusTip('Bold')
+        boldclick.triggered.connect(self.bold)
+        
+        underlineclick = QAction(QtGui.QIcon(
+                                      '/home/kunj/Desktop/icons/font_underline'),
+                                      'Underline', self) 
+        underlineclick.setStatusTip('Underline')
+        underlineclick.triggered.connect(self.underline)
+        
+        printclick = QAction(QtGui.QIcon(
+                                   '/home/kunj/Desktop/icons/print.png'),
+                                   'Print', self)        
         printclick.setShortcut('Ctrl+P')
         printclick.setStatusTip('Print')
-        printclick.triggered.connect(self.printfile)
-        """
+        #printclick.triggered.connect(self.printfile)
+        
         tab = QTextEdit()
         self.tab_widget = QTabWidget()
         self.tab_widget.tabsClosable()
+        textEditf = QFont()
         
         layout = QVBoxLayout(tab)
-        QtCore.QObject.connect(self.tab_widget, QtCore.SIGNAL('tabCloseRequested(int)'), self.close_tab)
+        QtCore.QObject.connect(self.tab_widget, 
+                              QtCore.SIGNAL('tabCloseRequested(int)'), 
+                              self.close_tab)
         self.setCentralWidget(self.tab_widget)
 
         self.statusBar()
+        
+        self.toolbar = self.addToolBar('New')
+        self.toolbar.addAction(newclick)
+        self.toolbar = self.addToolBar('Save')
+        self.toolbar.addAction(saveclick)
+        self.toolbar = self.addToolBar('Print')
+        self.toolbar.addAction(printclick)
+        self.toolbar = self.addToolBar('Exit')
+        self.toolbar.addAction(exitclick)
+        self.toolbar = self.addToolBar('Bold')
+        self.toolbar.addAction(boldclick)
+        self.toolbar = self.addToolBar('Italic')
+        self.toolbar.addAction(italicclick)
+        self.toolbar = self.addToolBar('Underline')
+        self.toolbar.addAction(underlineclick)
         
         menubar = self.menuBar()
         
@@ -83,7 +118,7 @@ class Window(QtGui.QMainWindow):
         fileMenu.addAction(saveclick)
         fileMenu.addAction(saveasclick)
         fileMenu.addAction(close_tab_click)
-        #fileMenu.addAction(printclick)
+        fileMenu.addAction(printclick)
         fileMenu.addAction(exitclick)
     
         editMenu = menubar.addMenu('Edit')
@@ -92,6 +127,8 @@ class Window(QtGui.QMainWindow):
         
         viewMenu = menubar.addMenu('View')
         viewMenu.addAction(italicclick)
+        viewMenu.addAction(boldclick)
+        viewMenu.addAction(underlineclick)
         
         self.showMaximized()        
         self.show()
@@ -144,6 +181,23 @@ class Window(QtGui.QMainWindow):
         textEdit = self.tab_widget.widget(tab_index)
         textEdit.setFontItalic(not self.italic_flag)
         self.italic_flag = not self.italic_flag
+    
+    def bold(self):
+        tab_index = self.tab_widget.currentIndex()
+        textEdit = self.tab_widget.widget(tab_index)
+        font_weight = textEdit.fontWeight()
+        if font_weight == 50:
+            font_weight = 75
+            textEdit.setFontWeight(font_weight)
+        else: 
+            font_weight = 50
+            textEdit.setFontWeight(font_weight)
+            
+    def underline(self):
+        tab_index = self.tab_widget.currentIndex()
+        textEdit = self.tab_widget.widget(tab_index)
+        textEdit.setFontUnderline(not self.underline_flag)
+        self.underline_flag = not self.underline_flag
     
     def copy(self):
         tab_index = self.tab_widget.currentIndex()
@@ -240,4 +294,4 @@ def KudoEdit():
     window = Window()
     sys.exit(app.exec_())
 
-#KudoEdit()
+KudoEdit()
