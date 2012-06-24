@@ -10,5 +10,6 @@ setup(name="KudoEdit",
   license='MIT',
   packages = find_packages(),
   requires=['PyQt4'],
+  package_data = { 'KudoEdit':["icons/*"]},
   scripts=['scripts/kudoedit']
   )

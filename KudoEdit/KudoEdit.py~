@@ -16,22 +16,22 @@ class Window(QtGui.QMainWindow):
         self.underline_flag = False
         self.path = os.path.abspath(__file__)
         self.icon_path = "/".join(self.path.split("/")[:-1]+["icons"])
-        saveclick = QAction(QIcon("/".join([self.icon_path,"save_icon.png"])), 'Save', self)        
+        saveclick = QAction(QtGui.QIcon('/home/kunj/Desktop/icons/save.png'), 'Save', self)        
         saveclick.setShortcut('Ctrl+S')
         saveclick.setStatusTip('Save')
         saveclick.triggered.connect(self.savefile)
         
-        exitclick = QAction(QIcon("/".join([self.icon_path,"exit_icon.png"])),'Exit', self)        
+        exitclick = QAction(QtGui.QIcon('/home/kunj/Desktop/icons/exit.png'),'Exit', self)        
         exitclick.setShortcut('Ctrl+Q')
         exitclick.setStatusTip('Exit')
         exitclick.triggered.connect(qApp.quit)
         
-        newclick = QAction(QIcon("/".join([self.icon_path,"new_icon.png"])), 'New', self)        
+        newclick = QAction(QtGui.QIcon('/home/kunj/Desktop/icons/new.png'), 'New', self)        
         newclick.setShortcut('Ctrl+N')
         newclick.setStatusTip('New File')
         newclick.triggered.connect(self.newfile)
     
-        openclick = QAction(QIcon("/".join([self.icon_path,"open_icon.png"])), 
+        openclick = QAction(QtGui.QIcon('/home/kunj/Desktop/icons/open.jpg'), 
                                         'Open', self)
         openclick.setShortcut('Ctrl+O')
         openclick.setStatusTip('Open')
@@ -57,22 +57,26 @@ class Window(QtGui.QMainWindow):
         close_tab_click.triggered.connect(self.close_tab)
         self.close_tab_click = close_tab_click
         
-        italicclick = QAction(QIcon("/".join([self.icon_path,"italic_icon.png"])),
+        italicclick = QAction(QtGui.QIcon(
+                                    '/home/kunj/Desktop/icons/font_italic.png'),
                                     'Italic', self)
         italicclick.setStatusTip('Italic')
         italicclick.triggered.connect(self.italic)
         
-        boldclick = QAction(QIcon("/".join([self.icon_path,"bold_icon.png"])),
+        boldclick = QAction(QtGui.QIcon(
+                                 '/home/kunj/Desktop/icons/font_bold.png'),
                                  'Bold', self)        
         boldclick.setStatusTip('Bold')
         boldclick.triggered.connect(self.bold)
         
-        underlineclick = QAction(QIcon("/".join([self.icon_path,"underline_icon.png"])),
+        underlineclick = QAction(QtGui.QIcon(
+                                      '/home/kunj/Desktop/icons/font_underline'),
                                       'Underline', self) 
         underlineclick.setStatusTip('Underline')
         underlineclick.triggered.connect(self.underline)
         
-        printclick = QAction(QIcon("/".join([self.icon_path,"print_icon.png"])),
+        printclick = QAction(QtGui.QIcon(
+                                   '/home/kunj/Desktop/icons/print.png'),
                                    'Print', self)        
         printclick.setShortcut('Ctrl+P')
         printclick.setStatusTip('Print')
