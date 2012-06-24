@@ -232,7 +232,8 @@ class Window(QtGui.QMainWindow):
             return
         textEdit = self.tab_widget.widget(tab_index)
         filename = QFileDialog.getSaveFileName(self,"Save File",os.getcwd())
-        print filename
+        if not filename:
+            return
         f=open(filename, 'w')
         f.write(textEdit.toPlainText())
         f.close()
