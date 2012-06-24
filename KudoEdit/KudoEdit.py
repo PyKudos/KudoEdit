@@ -290,4 +290,4 @@ def KudoEdit():
     window = Window()
     sys.exit(app.exec_())
 
-KudoEdit()
+#KudoEdit()
