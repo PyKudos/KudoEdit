@@ -16,61 +16,67 @@ class Window(QtGui.QMainWindow):
         self.underline_flag = False
         self.path = os.path.abspath(__file__)
         self.icon_path = "/".join(self.path.split("/")[:-1]+["icons"])
-        saveclick = QAction(QIcon("/".join([self.icon_path,"save_icon.png"])), 'Save', self)        
-        saveclick.setShortcut('Ctrl+S')
-        saveclick.setStatusTip('Save')
-        saveclick.triggered.connect(self.savefile)
+        self.saveclick = QAction(QIcon("/".join([self.icon_path,"save_icon.png"])), 'Save', self)        
+        self.saveclick.setShortcut('Ctrl+S')
+        self.saveclick.setStatusTip('Save')
+        self.saveclick.triggered.connect(self.savefile)
         
-        exitclick = QAction(QIcon("/".join([self.icon_path,"exit_icon.png"])),'Exit', self)        
-        exitclick.setShortcut('Ctrl+Q')
-        exitclick.setStatusTip('Exit')
-        exitclick.triggered.connect(qApp.quit)
+        self.exitclick = QAction(QIcon("/".join([self.icon_path,"exit_icon.png"])),'Exit', self)        
+        self.exitclick.setShortcut('Ctrl+Q')
+        self.exitclick.setStatusTip('Exit')
+        self.exitclick.triggered.connect(qApp.quit)
         
-        newclick = QAction(QIcon("/".join([self.icon_path,"new_icon.png"])), 'New', self)        
-        newclick.setShortcut('Ctrl+N')
-        newclick.setStatusTip('New File')
-        newclick.triggered.connect(self.newfile)
+        self.newclick = QAction(QIcon("/".join([self.icon_path,"new_icon.png"])), 'New', self)        
+        self.newclick.setShortcut('Ctrl+N')
+        self.newclick.setStatusTip('New File')
+        self.newclick.triggered.connect(self.newfile)
     
-        openclick = QAction(QIcon("/".join([self.icon_path,"open_icon.png"])), 
+        self.openclick = QAction(QIcon("/".join([self.icon_path,"open_icon.png"])), 
                                         'Open', self)
-        openclick.setShortcut('Ctrl+O')
-        openclick.setStatusTip('Open')
-        openclick.triggered.connect(self.openfile)
+        self.openclick.setShortcut('Ctrl+O')
+        self.openclick.setStatusTip('Open')
+        self.openclick.triggered.connect(self.openfile)
 
-        saveasclick = QAction('SaveAs', self)        
-        saveasclick.setStatusTip('Save As')
-        saveasclick.triggered.connect(self.save_asfile)
+        self.saveasclick = QAction('SaveAs', self)        
+        self.saveasclick.setStatusTip('Save As')
+        self.saveasclick.triggered.connect(self.save_asfile)
         
-        copyclick = QAction('Copy', self)
-        copyclick.setShortcut('Ctrl+C')
-        copyclick.setStatusTip('Copy')
-        copyclick.triggered.connect(self.copy)
+        self.copyclick = QAction('Copy', self)
+        self.copyclick.setShortcut('Ctrl+C')
+        self.copyclick.setStatusTip('Copy')
+        self.copyclick.triggered.connect(self.copy)
         
-        pasteclick = QAction('Paste', self)        
-        pasteclick.setShortcut('Ctrl+V')
-        pasteclick.setStatusTip('Paste')
-        pasteclick.triggered.connect(self.paste)
+        self.pasteclick = QAction('Paste', self)        
+        self.pasteclick.setShortcut('Ctrl+V')
+        self.pasteclick.setStatusTip('Paste')
+        self.pasteclick.triggered.connect(self.paste)
         
-        close_tab_click = QAction('Close', self)        
-        close_tab_click.setShortcut('Ctrl+W')
-        close_tab_click.setStatusTip('Close Current Tab')
-        close_tab_click.triggered.connect(self.close_tab)
-        self.close_tab_click = close_tab_click
+        self.close_tab_click = QAction('Close', self)        
+        self.close_tab_click.setShortcut('Ctrl+W')
+        self.close_tab_click.setStatusTip('Close Current Tab')
+        self.close_tab_click.triggered.connect(self.close_tab)
+        #self.close_tab_click = close_tab_click
         
         italicclick = QAction(QIcon("/".join([self.icon_path,"italic_icon.png"])),
                                     'Italic', self)
+        italicclick.setShortcut('Ctrl+I')
         italicclick.setStatusTip('Italic')
         italicclick.triggered.connect(self.italic)
+        self.italicclick = italicclick
         
         boldclick = QAction(QIcon("/".join([self.icon_path,"bold_icon.png"])),
                                  'Bold', self)        
+        boldclick.setShortcut('Ctrl+B')
         boldclick.setStatusTip('Bold')
         boldclick.triggered.connect(self.bold)
+        self.boldclick = boldclick
         
         underlineclick = QAction(QIcon("/".join([self.icon_path,"underline_icon.png"])),
                                       'Underline', self) 
+        underlineclick.setShortcut('Ctrl+U')
         underlineclick.setStatusTip('Underline')
         underlineclick.triggered.connect(self.underline)
+        self.underlineclick = underlineclick
         
         printclick = QAction(QIcon("/".join([self.icon_path,"print_icon.png"])),
                                    'Print', self)        
@@ -90,41 +96,33 @@ class Window(QtGui.QMainWindow):
         self.setCentralWidget(self.tab_widget)
 
         self.statusBar()
-        
         self.toolbar = self.addToolBar('New')
-        self.toolbar.addAction(newclick)
-        self.toolbar = self.addToolBar('Save')
-        self.toolbar.addAction(saveclick)
-        self.toolbar = self.addToolBar('Print')
-        self.toolbar.addAction(printclick)
-        self.toolbar = self.addToolBar('Exit')
-        self.toolbar.addAction(exitclick)
-        self.toolbar = self.addToolBar('Bold')
-        self.toolbar.addAction(boldclick)
-        self.toolbar = self.addToolBar('Italic')
-        self.toolbar.addAction(italicclick)
-        self.toolbar = self.addToolBar('Underline')
-        self.toolbar.addAction(underlineclick)
+        self.toolbar.addAction(self.newclick)
+        self.toolbar.addAction(self.saveclick)
+        self.toolbar.addAction(self.exitclick)
+        self.toolbar.addAction(self.boldclick)
+        self.toolbar.addAction(self.italicclick)
+        self.toolbar.addAction(self.underlineclick)
         
         menubar = self.menuBar()
         
         fileMenu = menubar.addMenu('File')
-        fileMenu.addAction(newclick)
-        fileMenu.addAction(openclick)
-        fileMenu.addAction(saveclick)
-        fileMenu.addAction(saveasclick)
-        fileMenu.addAction(close_tab_click)
-        fileMenu.addAction(printclick)
-        fileMenu.addAction(exitclick)
+        fileMenu.addAction(self.newclick)
+        fileMenu.addAction(self.openclick)
+        fileMenu.addAction(self.saveclick)
+        fileMenu.addAction(self.saveasclick)
+        fileMenu.addAction(self.close_tab_click)
+        #fileMenu.addAction(printclick)
+        fileMenu.addAction(self.exitclick)
     
         editMenu = menubar.addMenu('Edit')
-        editMenu.addAction(copyclick)
-        editMenu.addAction(pasteclick)
+        editMenu.addAction(self.copyclick)
+        editMenu.addAction(self.pasteclick)
         
         viewMenu = menubar.addMenu('View')
-        viewMenu.addAction(italicclick)
-        viewMenu.addAction(boldclick)
-        viewMenu.addAction(underlineclick)
+        viewMenu.addAction(self.italicclick)
+        viewMenu.addAction(self.boldclick)
+        viewMenu.addAction(self.underlineclick)
         
         self.showMaximized()        
         self.show()
@@ -173,26 +171,57 @@ class Window(QtGui.QMainWindow):
     """
     
     def italic(self):
+        italic_button = self.toolbar.widgetForAction(self.italicclick)
+        italic_icon = QIcon("/".join([self.icon_path,"italic_icon.png"]))
+        print self.italic_flag
+        if not self.italic_flag:
+            new_pixmap = italic_icon.pixmap(QtCore.QSize(20,20),QIcon.Disabled,QIcon.On)
+        else:
+            new_pixmap = italic_icon.pixmap(QtCore.QSize(20,20),QIcon.Active, QIcon.On)
+        
+        new_icon = QIcon(new_pixmap)
+        italic_button.setIcon(new_icon)
         tab_index = self.tab_widget.currentIndex()
         textEdit = self.tab_widget.widget(tab_index)
+        if not textEdit:
+            return
         textEdit.setFontItalic(not self.italic_flag)
         self.italic_flag = not self.italic_flag
     
     def bold(self):
+        bold_button = self.toolbar.widgetForAction(self.boldclick)
+        bold_icon = QIcon("/".join([self.icon_path,"bold_icon.png"]))
         tab_index = self.tab_widget.currentIndex()
         textEdit = self.tab_widget.widget(tab_index)
+        if not textEdit:
+            return
         font_weight = textEdit.fontWeight()
         if font_weight == 50:
+            new_pixmap = bold_icon.pixmap(QtCore.QSize(20,20),QIcon.Disabled,QIcon.On)
             font_weight = 75
             textEdit.setFontWeight(font_weight)
         else: 
+            new_pixmap = bold_icon.pixmap(QtCore.QSize(20,20),QIcon.Active, QIcon.On)
             font_weight = 50
             textEdit.setFontWeight(font_weight)
+        new_icon = QIcon(new_pixmap)
+        bold_button.setIcon(new_icon)
             
     def underline(self):
         tab_index = self.tab_widget.currentIndex()
         textEdit = self.tab_widget.widget(tab_index)
+        if not textEdit:
+            return
+        if not self.underline_flag:
+            status = QIcon.Disabled
+        else:
+            status = QIcon.Active
         textEdit.setFontUnderline(not self.underline_flag)
+        button = self.toolbar.widgetForAction(self.underlineclick)
+        icon = QIcon("/".join([self.icon_path,"underline_icon.png"]))
+        new_pixmap = icon.pixmap(QtCore.QSize(20,20),status,QIcon.On)
+        new_icon = QIcon(new_pixmap)
+        button.setIcon(new_icon)
         self.underline_flag = not self.underline_flag
     
     def copy(self):
@@ -232,8 +261,7 @@ class Window(QtGui.QMainWindow):
             return
         textEdit = self.tab_widget.widget(tab_index)
         filename = QFileDialog.getSaveFileName(self,"Save File",os.getcwd())
-        if not filename:
-            return
+        print filename
         f=open(filename, 'w')
         f.write(textEdit.toPlainText())
         f.close()
@@ -291,4 +319,4 @@ def KudoEdit():
     window = Window()
     sys.exit(app.exec_())
 
-#KudoEdit()
+KudoEdit()
