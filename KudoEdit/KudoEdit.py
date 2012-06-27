@@ -261,6 +261,8 @@ class Window(QtGui.QMainWindow):
             return
         textEdit = self.tab_widget.widget(tab_index)
         filename = QFileDialog.getSaveFileName(self,"Save File",os.getcwd())
+        if not filename:
+            return
         print filename
         f=open(filename, 'w')
         f.write(textEdit.toPlainText())
@@ -270,6 +272,8 @@ class Window(QtGui.QMainWindow):
         
     def openfile(self):
         filename = QFileDialog.getOpenFileName(self,"Open File",os.getcwd())
+        if not filename:
+            return
         print filename
         f=open(filename, 'r')
         text=f.read()
