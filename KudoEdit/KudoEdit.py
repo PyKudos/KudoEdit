@@ -318,5 +318,3 @@ def KudoEdit():
     app = QApplication(sys.argv)
     window = Window()
     sys.exit(app.exec_())
-
-KudoEdit()
