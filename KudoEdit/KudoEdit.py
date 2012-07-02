@@ -16,80 +16,52 @@ class Window(QtGui.QMainWindow):
         self.underline_flag = False
         self.path = os.path.abspath(__file__)
         self.icon_path = "/".join(self.path.split("/")[:-1]+["icons"])
-        self.saveclick = QAction(QIcon("/".join([self.icon_path,"save_icon.png"])), 'Save', self)        
-        self.saveclick.setShortcut('Ctrl+S')
-        self.saveclick.setStatusTip('Save')
-        self.saveclick.triggered.connect(self.savefile)
         
-    def add_action(self, action_name, shortcut=None, icon_path=None):
-        action = QAction(QIcon(icon_path), action_name, self)
-        action.setShortcut(shortcut)
-        action.setStatusTip(action_name)
-        return action
-        
-        #self.exitclick = QAction(QIcon("/".join([self.icon_path,"exit_icon.png"])),'Exit', self)        
-        #self.exitclick.setShortcut('Ctrl+Q')
-        #self.exitclick.setStatusTip('Exit')
-        self.exitclick = self.add_action("Exit", "Ctrl+Q", '"/".join([self.icon_path,"exit_icon.png"])')
+        self.exitclick = self.add_action("Exit", "Ctrl+Q", 
+                                         "/".join([self.icon_path,"exit_icon.png"]))
         self.exitclick.triggered.connect(qApp.quit)
         
-        self.newclick = QAction(QIcon("/".join([self.icon_path,"new_icon.png"])), 'New', self)        
-        self.newclick.setShortcut('Ctrl+N')
-        self.newclick.setStatusTip('New File')
+        self.newclick = self.add_action("New", "Ctrl+N",
+                                        "/".join([self.icon_path,"new_icon.png"]))
         self.newclick.triggered.connect(self.newfile)
-    
-        self.openclick = QAction(QIcon("/".join([self.icon_path,"open_icon.png"])), 
-                                        'Open', self)
-        self.openclick.setShortcut('Ctrl+O')
-        self.openclick.setStatusTip('Open')
+        
+        self.openclick = self.add_action("Open", "Ctrl+O",
+                                         "/".join([self.icon_path,"open_icon.png"]))
         self.openclick.triggered.connect(self.openfile)
-
-        self.saveasclick = QAction('SaveAs', self)        
-        self.saveasclick.setStatusTip('Save As')
+        
+        self.saveclick = self.add_action("Save", "Ctrl+S",
+                                         "/".join([self.icon_path,"save_icon.png"]))
+        self.exitclick.triggered.connect(self.savefile)
+        
+        self.saveasclick = self.add_action("SaveAs", "Ctrl+Shift+S", 
+                                          "/".join([self.icon_path,"save_as_icon.gif"]))
         self.saveasclick.triggered.connect(self.save_asfile)
         
-        self.copyclick = QAction(QIcon("/".join([self.icon_path,"copy_icon.png"])),'Copy', self)
-        self.copyclick.setShortcut('Ctrl+C')
-        self.copyclick.setStatusTip('Copy')
+        self.copyclick = self.add_action("Copy", "Ctrl+C",
+                                         "/".join([self.icon_path,"copy_icon.png"]))
         self.copyclick.triggered.connect(self.copy)
         
-        self.pasteclick = QAction(QIcon("/".join([self.icon_path,"paste_icon.jpg"])), 'Paste', self)        
-        self.pasteclick.setShortcut('Ctrl+V')
-        self.pasteclick.setStatusTip('Paste')
+        self.pasteclick = self.add_action("Paste", "Ctrl+V",
+                                         "/".join([self.icon_path,"paste_icon.jpg"]))
         self.pasteclick.triggered.connect(self.paste)
         
-        self.close_tab_click = QAction('Close', self)        
-        self.close_tab_click.setShortcut('Ctrl+W')
-        self.close_tab_click.setStatusTip('Close Current Tab')
+        #self.printclick = self.add_action("Print", "Ctrl+P", "/".join([self.icon_path,"print_icon.jpg"]))
+        #self.pasteclick.triggered.connect(self.print)
+        
+        self.close_tab_click = self.add_action("Close", "Ctrl+W", self)
         self.close_tab_click.triggered.connect(self.close_tab)
-        #self.close_tab_click = close_tab_click
         
-        italicclick = QAction(QIcon("/".join([self.icon_path,"italic_icon.png"])),
-                                    'Italic', self)
-        italicclick.setShortcut('Ctrl+I')
-        italicclick.setStatusTip('Italic')
-        italicclick.triggered.connect(self.italic)
-        self.italicclick = italicclick
+        self.italicclick = self.add_action("Italic", "Ctrl+I",
+                                          "/".join([self.icon_path,"italic_icon.png"]))
+        self.italicclick.triggered.connect(self.italic)
         
-        boldclick = QAction(QIcon("/".join([self.icon_path,"bold_icon.png"])),
-                                 'Bold', self)        
-        boldclick.setShortcut('Ctrl+B')
-        boldclick.setStatusTip('Bold')
-        boldclick.triggered.connect(self.bold)
-        self.boldclick = boldclick
+        self.boldclick = self.add_action("Bold", "Ctrl+B",
+                                         "/".join([self.icon_path,"bold_icon.png"]))
+        self.boldclick.triggered.connect(self.bold)
         
-        underlineclick = QAction(QIcon("/".join([self.icon_path,"underline_icon.png"])),
-                                      'Underline', self) 
-        underlineclick.setShortcut('Ctrl+U')
-        underlineclick.setStatusTip('Underline')
-        underlineclick.triggered.connect(self.underline)
-        self.underlineclick = underlineclick
-        
-        printclick = QAction(QIcon("/".join([self.icon_path,"print_icon.png"])),
-                                   'Print', self)        
-        printclick.setShortcut('Ctrl+P')
-        printclick.setStatusTip('Print')
-        #printclick.triggered.connect(self.printfile)
+        self.underlineclick = self.add_action("Underline", "Ctrl+U",
+                                             "/".join([self.icon_path,"underline_icon.png"]))
+        self.underlineclick.triggered.connect(self.underline)
         
         tab = QTextEdit()
         self.tab_widget = QTabWidget()
@@ -106,6 +78,7 @@ class Window(QtGui.QMainWindow):
         self.toolbar = self.addToolBar('New')
         self.toolbar.addAction(self.newclick)
         self.toolbar.addAction(self.saveclick)
+        self.toolbar.addAction(self.saveasclick)
         self.toolbar.addAction(self.openclick)
         self.toolbar.addAction(self.exitclick)
         self.toolbar.addAction(self.copyclick)
@@ -136,6 +109,12 @@ class Window(QtGui.QMainWindow):
         
         self.showMaximized()        
         self.show()
+    
+    def add_action(self, action_name, shortcut=None, icon_path=None):
+        action = QAction(QIcon(icon_path), action_name, self)
+        action.setShortcut(shortcut)
+        action.setStatusTip(action_name)
+        return action
     
     def keyReleaseEvent(self, e):
         tab_index = self.tab_widget.currentIndex()
