@@ -18,51 +18,42 @@ class Window(QtGui.QMainWindow):
         self.icon_path = "/".join(self.path.split("/")[:-1]+["icons"])
         
         self.exitclick = self.add_action("Exit", "Ctrl+Q", 
-                                         "/".join([self.icon_path,"exit_icon.png"]))
-        self.exitclick.triggered.connect(qApp.quit)
-        
+                                         "/".join([self.icon_path,"exit_icon.png"]),
+                                        qApp.quit)
         self.newclick = self.add_action("New", "Ctrl+N",
-                                        "/".join([self.icon_path,"new_icon.png"]))
-        self.newclick.triggered.connect(self.newfile)
-        
+                                        "/".join([self.icon_path,"new_icon.png"]),
+                                        self.newfile)
         self.openclick = self.add_action("Open", "Ctrl+O",
-                                         "/".join([self.icon_path,"open_icon.png"]))
-        self.openclick.triggered.connect(self.openfile)
-        
+                                         "/".join([self.icon_path,"open_icon.png"]),
+                                         self.openfile)
         self.saveclick = self.add_action("Save", "Ctrl+S",
-                                         "/".join([self.icon_path,"save_icon.png"]))
-        self.exitclick.triggered.connect(self.savefile)
-        
+                                         "/".join([self.icon_path,"save_icon.png"]),
+                                         self.savefile)
         self.saveasclick = self.add_action("SaveAs", "Ctrl+Shift+S", 
-                                          "/".join([self.icon_path,"save_as_icon.gif"]))
-        self.saveasclick.triggered.connect(self.save_asfile)
-        
+                                          "/".join([self.icon_path,"save_as_icon.gif"]),
+                                          self.save_asfile)
         self.copyclick = self.add_action("Copy", "Ctrl+C",
-                                         "/".join([self.icon_path,"copy_icon.png"]))
-        self.copyclick.triggered.connect(self.copy)
-        
+                                         "/".join([self.icon_path,"copy_icon.png"]),
+                                         self.copy)
         self.pasteclick = self.add_action("Paste", "Ctrl+V",
-                                         "/".join([self.icon_path,"paste_icon.jpg"]))
-        self.pasteclick.triggered.connect(self.paste)
-        
-        #self.printclick = self.add_action("Print", "Ctrl+P", "/".join([self.icon_path,"print_icon.jpg"]))
-        #self.pasteclick.triggered.connect(self.print)
-        
-        self.close_tab_click = self.add_action("Close", "Ctrl+W", self)
-        self.close_tab_click.triggered.connect(self.close_tab)
-        
+                                         "/".join([self.icon_path,"paste_icon.jpg"]),
+                                         self.paste)
+        #self.printclick = self.add_action("Print", "Ctrl+P",
+        #                                 "/".join([self.icon_path,"print_icon.jpg"]),
+        #                                  self.printclick)
+        self.close_tab_click = self.add_action("Close", "Ctrl+W",
+                                                self,
+                                                self.close_tab)
         self.italicclick = self.add_action("Italic", "Ctrl+I",
-                                          "/".join([self.icon_path,"italic_icon.png"]))
-        self.italicclick.triggered.connect(self.italic)
-        
+                                          "/".join([self.icon_path,"italic_icon.png"]),
+                                          self.italic)
         self.boldclick = self.add_action("Bold", "Ctrl+B",
-                                         "/".join([self.icon_path,"bold_icon.png"]))
-        self.boldclick.triggered.connect(self.bold)
-        
+                                         "/".join([self.icon_path,"bold_icon.png"]),
+                                         self.bold)
         self.underlineclick = self.add_action("Underline", "Ctrl+U",
-                                             "/".join([self.icon_path,"underline_icon.png"]))
-        self.underlineclick.triggered.connect(self.underline)
-        
+                                             "/".join([self.icon_path,"underline_icon.png"]),
+                                             self.underline)
+
         tab = QTextEdit()
         self.tab_widget = QTabWidget()
         self.tab_widget.tabsClosable()
@@ -109,11 +100,12 @@ class Window(QtGui.QMainWindow):
         
         self.showMaximized()        
         self.show()
-    
-    def add_action(self, action_name, shortcut=None, icon_path=None):
+       
+    def add_action(self, action_name, shortcut=None, icon_path=None, trigger_action=None ):
         action = QAction(QIcon(icon_path), action_name, self)
         action.setShortcut(shortcut)
         action.setStatusTip(action_name)
+        action.triggered.connect(trigger_action)
         return action
     
     def keyReleaseEvent(self, e):
